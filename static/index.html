@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>TravelInsights - Global Tourism Analytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- TOP NAVIGATION -->
+    <header class="top-nav">
+        <div class="nav-container">
+            <div class="logo">TravelInsights<span>AI</span></div>
+            <nav class="nav-links">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#dashboards" class="nav-link">Dashboards</a>
+                <a href="#quiz" class="nav-link">Quiz</a>
+                <a href="#faqs" class="nav-link">FAQs</a>
+            </nav>
+            <div class="nav-actions">
+                <div class="profile-menu" id="profileMenu" style="display: none;">
+                    <button class="profile-btn" id="profileBtn">
+                        <span class="profile-icon">👤</span>
+                        <span id="profileName">User</span>
+                    </button>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="#profile">My Profile</a>
+                        <a href="#feedback">Feedback</a>
+                        <a href="#" id="logoutLink">Logout</a>
+                    </div>
+                </div>
+                <button class="btn-login" id="loginBtn">Login</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- HOME SECTION -->
+        <section id="home" class="page-section active">
+            <div class="hero-section">
+                <h1>Global Holidays & Tourism Intelligence</h1>
+                <p class="hero-subtitle">
+                    Explore global holiday calendars, tourism patterns, and interactive analytics in one powerful platform.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Interactive Dashboards</h3>
+                    <p>Power BI dashboards with global holidays and tourism data visualization</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Chatbot Assistant</h3>
+                    <p>Ask natural language questions about destinations, holidays, and statistics</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Global Coverage</h3>
+                    <p>Comprehensive data on holidays, tourism flows, and travel trends worldwide</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3>Data-Driven Insights</h3>
+                    <p>Analyze patterns, compare countries, and discover tourism opportunities</p>
+                </div>
+            </div>
+
+            <div class="highlights-section">
+                <h2>Key Highlights</h2>
+                <div class="highlights-grid">
+                    <div class="highlight-item">
+                        <h4>🎯 Peak Tourism Months</h4>
+                        <p>Identify peak inbound tourism periods by country and season</p>
+                    </div>
+                    <div class="highlight-item">
+                        <h4>✈️ Top Destinations</h4>
+                        <p>Discover most visited destinations by Indian travelers</p>
+                    </div>
+                    <div class="highlight-item">
+                        <h4>🎉 Holiday Clusters</h4>
+                        <p>Analyze how holidays drive tourism spikes globally</p>
+                    </div>
+                    <div class="highlight-item">
+                        <h4>💰 Revenue Trends</h4>
+                        <p>Track tourism receipts and revenue patterns over time</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DASHBOARDS SECTION -->
+        <section id="dashboards" class="page-section">
+            <h2 class="section-title">Tourism Analytics Dashboards</h2>
+            <p class="section-subtitle">Explore interactive Power BI reports with real-time data and insights</p>
+            <div class="dashboard-container">
+                <h2 style="text-align:center; margin-bottom:20px; color:#1e293b;">
+                    Interactive Tourism Analytics Dashboard
+                </h2>
+                <p style="text-align:center; color:#64748b; margin-bottom:30px;">
+                    Use the page tabs at the bottom to switch between sheets
+                </p>
+
+                <!-- Paste the exact iframe code Power BI gave you here -->
+                <iframe 
+                    width="100%" 
+                    height="750" 
+                    src="https://app.powerbi.com/view?r=eyJrIjoiMGIxMmQ5ODEtY2U3OC00Y2RmLTg0ZTUtNmJhMmEwNmJhYWEwIiwidCI6IjA0ZjJmZTlmLTRlYWEtNGYyOS1iY2JkLTAyMTM2OWMxMTViYiJ9"   <!-- YOUR PUBLISH-TO-WEB LINK -->
+                    frameborder="0" 
+                    allowFullScreen="true">
+                </iframe>
+            </div>
+        </section>
+
+        <!-- QUIZ SECTION -->
+        <section id="quiz" class="page-section">
+            <h2 class="section-title">Tourism Knowledge Quiz</h2>
+            <p class="section-subtitle">Test your understanding of global holidays and tourism analytics</p>
+
+            <div class="quiz-container">
+                <form id="quizForm" class="quiz-form">
+                    <div class="quiz-question">
+                        <p class="question-text">1. Inbound tourism refers to:</p>
+                        <label class="radio-label">
+                            <input type="radio" name="q1" value="a" />
+                            <span>Residents travelling abroad</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="q1" value="b" />
+                            <span>Non-residents visiting a country</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="q1" value="c" />
+                            <span>Domestic travel only</span>
+                        </label>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p class="question-text">2. A sudden spike in arrivals around certain dates usually indicates:</p>
+                        <label class="radio-label">
+                            <input type="radio" name="q2" value="a" />
+                            <span>Data error</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="q2" value="b" />
+                            <span>Holiday / festival impact</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="q2" value="c" />
+                            <span>Port closure</span>
+                        </label>
+                    </div>
+
+                    <div class="quiz-question">
+                        <p class="question-text">3. Which visual is best to compare monthly tourism revenue across years?</p>
+                        <label class="radio-label">
+                            <input type="radio" name="q3" value="a" />
+                            <span>Line / combo chart</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="q3" value="b" />
+                            <span>Pie chart</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="q3" value="c" />
+                            <span>Tree map</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Submit Quiz</button>
+                </form>
+                <div id="quizResult" class="quiz-result"></div>
+            </div>
+        </section>
+
+        <!-- FAQS SECTION -->
+        <section id="faqs" class="page-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-subtitle">Quick answers to common questions about the platform</p>
+
+            <div class="faq-container">
+                <details class="faq-item">
+                    <summary>What data sources are used in these dashboards?</summary>
+                    <p>The dashboards use curated datasets on global holidays, inbound and outbound tourism statistics, port-wise departures, and tourism receipts from official government sources and international tourism organizations.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Can I filter by a specific country or year?</summary>
+                    <p>Yes! Use the slicers and filters available on the Power BI dashboards. You can filter by country, year, visitor type, port, and many other dimensions to customize your analysis.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>How do I use the AI chatbot assistant?</summary>
+                    <p>Click the chat icon in the bottom-right corner. Select a category (Holiday Details, Travel Guidance, or Statistics) and ask your question in natural language. The AI will provide relevant information from our database.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Is the data updated regularly?</summary>
+                    <p>Yes, our dashboards are connected to regularly updated datasets. Tourism statistics are updated monthly, while holiday information is updated annually.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Can I export data from the dashboards?</summary>
+                    <p>If you have appropriate permissions, you can export data directly from Power BI visualizations by right-clicking on charts and selecting "Export data".</p>
+                </details>
+            </div>
+        </section>
+
+        <!-- PROFILE SECTION -->
+        <section id="profile" class="page-section">
+            <h2 class="section-title">My Profile</h2>
+            <p class="section-subtitle">Manage your account information</p>
+
+            <div class="profile-container">
+                <form class="profile-form" id="profileForm">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="profileFullName" placeholder="Enter your name" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="profileEmail" placeholder="your@email.com" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Organization</label>
+                        <input type="text" id="profileOrg" placeholder="College / Company" />
+                    </div>
+                    <div class="form-group">
+                        <label>Role / Interest</label>
+                        <select id="profileRole">
+                            <option>Student / Research</option>
+                            <option>Tourism Business</option>
+                            <option>Government / Policy</option>
+                            <option>Traveller / General</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </form>
+                <div id="profileStatus" class="status-message"></div>
+            </div>
+        </section>
+
+        <!-- FEEDBACK SECTION -->
+        <section id="feedback" class="page-section">
+            <h2 class="section-title">Feedback & Support</h2>
+            <p class="section-subtitle">Share your experience or report issues</p>
+
+            <div class="feedback-container">
+                <form class="feedback-form" id="feedbackForm">
+                    <div class="form-group">
+                        <label>Feedback Type</label>
+                        <select id="feedbackType">
+                            <option value="experience">Overall Experience</option>
+                            <option value="query">Query / Question</option>
+                            <option value="bug">Bug Report</option>
+                            <option value="complaint">Complaint</option>
+                            <option value="suggestion">Suggestion</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" id="feedbackSubject" placeholder="Brief description" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea id="feedbackMessage" rows="5" placeholder="Provide details..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Submit Feedback</button>
+                </form>
+                <div id="feedbackStatus" class="status-message"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FLOATING CHATBOT BUTTON (From your original chatbot) -->
+    <button class="chatbot-float" id="chatbotFloat" title="Open Travel Assistant">
+        💬
+    </button>
+
+    <!-- CHATBOT POPUP (FIXED: Scroll + Input Always Visible) -->
+    <div class="chatbot-popup" id="chatbotPopup">
+        <div class="chatbot-header">
+            <span>Tara Your Travel Assistant</span>
+            <button class="close-chatbot" id="closeChatbot">×</button>
+        </div>
+        <div class="chatbot-body">
+            <div id="chatbotMessages" class="chatbot-messages"></div>
+            <div class="chatbot-input-area">
+                <select id="chatbotCategory" class="chatbot-select">
+                    <option value="">Select</option>
+                    <option value="holiday details">Holidays</option>
+                    <option value="destination guidance">Guidance</option>
+                    <option value="travel statistics">Stats</option>
+                </select>
+                <input type="text" id="chatbotInput" placeholder="Ask your question..." />
+                <button id="chatbotSend">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeLogin">&times;</span>
+            <h2>Welcome Back</h2>
+            <p class="modal-subtitle">Login to access all features</p>
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="your@email.com" required />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password" required />
+                </div>
+                <button type="submit" class="btn-primary btn-block">Login</button>
+                <p class="auth-switch">
+                    Don't have an account? <a href="#" id="switchToRegister">Sign up</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- REGISTER MODAL -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeRegister">&times;</span>
+            <h2>Create Account</h2>
+            <p class="modal-subtitle">Join TravelInsights AI today</p>
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="registerName" placeholder="Your name" required />
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" placeholder="your@email.com" required />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" placeholder="Choose password" required />
+                </div>
+                <button type="submit" class="btn-primary btn-block">Create Account</button>
+                <p class="auth-switch">
+                    Already have an account? <a href="#" id="switchToLogin">Login</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
