@@ -1051,6 +1051,515 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,.1);
 }
+
+/* SETTINGS MODAL STYLING */
+.settings-section {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.settings-section h3 {
+    margin: 0 0 12px 0;
+    color: #1e293b;
+    font-size: 1rem;
+}
+
+.btn-secondary {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background: #fee2e2 !important;
+    color: #dc2626 !important;
+    border-color: #fecaca !important;
+}
+
+/* =======================================================
+   BEAUTIFUL LIGHT MODE (MATCHES POWER BI DASHBOARD COLORS)
+   ======================================================= */
+
+/* Soft pastel background for full site */
+body {
+    background: #faf5f7 !important;   /* soft pinkish-white */
+}
+
+/* 🌸 Feature Cards */
+.feature-card {
+    background: #fff8fb !important;        /* soft pink-white */
+    border: 1px solid #edd3df !important;  /* pastel border */
+    box-shadow: 0 4px 14px rgba(0,0,0,0.04) !important;
+}
+
+/* 🌸 Feature Card hover */
+.feature-card:hover {
+    box-shadow: 0 10px 25px rgba(180,110,145,0.15) !important;
+}
+
+/* 🌸 Highlights big box */
+.highlights-section {
+    background: #fff8fb !important;
+    border: 1px solid #edd3df !important;
+}
+
+/* 🌸 Each highlight item */
+.highlight-item {
+    background: #fef1f6 !important;
+    border-left: 4px solid #b46fa5 !important;
+    border-radius: 10px !important;
+}
+
+/* 🌸 Quiz container */
+.quiz-container {
+    background: #fff8fb !important;
+    border: 1px solid #edd3df !important;
+}
+
+/* Each quiz question */
+.quiz-question {
+    background: #fef1f6 !important;
+    border: 1px solid #edd3df !important;
+}
+
+/* 🌸 FAQ container */
+.faq-container {
+    background: #fff8fb !important;
+    border: 1px solid #edd3df !important;
+}
+
+/* FAQ summary */
+.faq-item summary {
+    background: #fef1f6 !important;
+    border-bottom: 1px solid #ead0dc !important;
+}
+
+/* 🌸 Profile & Feedback Forms */
+.profile-container,
+.feedback-container {
+    background: #fff8fb !important;
+    border: 1px solid #edd3df !important;
+}
+
+/* 🌸 Login / Signup Modal */
+.modal-content {
+    background: #fff8fb !important;
+    border: 1px solid #edd3df !important;
+    box-shadow: 0 15px 35px rgba(180,110,145,0.12) !important;
+}
+
+/* 🌸 Input Fields */
+.form-group input,
+.form-group textarea,
+.form-group select {
+    background: #fff !important;
+    border: 1px solid #d9bdd0 !important;
+}
+
+/* 🌸 Buttons – match the dashboard purple */
+.btn-primary,
+.btn-login {
+    background: #b46fa5 !important;   /* pastel purple */
+    border-color: #a36295 !important;
+}
+
+.btn-primary:hover,
+.btn-login:hover {
+    background: #9c568a !important;
+}
+
+/* Chatbot Popup */
+.chatbot-popup {
+    background: #fff8fb !important;
+    border: 1px solid #edd3df !important;
+    box-shadow: 0 12px 28px rgba(180,110,145,0.15) !important;
+}
+
+/* Chatbot messages */
+.chat-message.bot {
+    background: #f3e6f0 !important;
+    border-color: #e5d2df !important;
+}
+
+.chat-message.user {
+    background: #b46fa5 !important;
+}
+
+/* FINAL OVERRIDE — SITE-WIDE BACKGROUND FIX */
+body {
+    background: #faf2f6 !important;   /* soft pink dashboard color */
+    color: #1e293b;
+}
+
+.page-section,
+.main-content {
+    background: #faf2f6 !important;
+}
+
+.feature-card,
+.highlights-section,
+.quiz-container,
+.faq-container,
+.profile-container,
+.feedback-container,
+.modal-content,
+.chatbot-popup {
+    background: #f5dbe6 !important; 
+    border: 1px solid #f1c7dc !important;
+}
+
+/* ================= FINAL THEME OVERRIDE (MATCHES DASHBOARD) ================= */
+
+:root {
+    --pastel-bg: #faeef3;         /* Page background */
+    --pastel-box: #f7e6ee;        /* Box/Card background */
+    --pastel-border: #e7c9d7;     /* Soft border */
+    --pastel-accent: #d7adc3;     /* Hover/Accent */
+}
+
+/* Page Background */
+body {
+    background: var(--pastel-bg) !important;
+}
+
+/* NAVBAR */
+.top-nav {
+    background: var(--pastel-box) !important;
+    box-shadow: 0 2px 6px rgba(200, 150, 170, 0.2) !important;
+    border-bottom: 1px solid var(--pastel-border) !important;
+}
+
+/* NAV LINKS */
+.nav-link {
+    color: #4b3f46 !important;
+}
+
+.nav-link.active,
+.nav-link:hover {
+    background: var(--pastel-accent) !important;
+    color: #000 !important;
+}
+
+/* PROFILE DROPDOWN */
+.profile-dropdown {
+    background: var(--pastel-box) !important;
+    border: 1px solid var(--pastel-border) !important;
+    box-shadow: 0 4px 20px rgba(94, 53, 73, 0.15) !important;
+}
+
+.profile-dropdown a:hover {
+    background: var(--pastel-accent) !important;
+    color: #000 !important;
+}
+
+/* REMOVE PURPLE HERO BOX */
+.hero-section {
+    background: linear-gradient(135deg, #c24e91, #ac7b8f) !important;
+    color: #3d2b34 !important;
+}
+
+/* CARDS */
+.feature-card,
+.highlights-section,
+.quiz-container,
+.faq-container,
+.profile-container,
+.feedback-container,
+.modal-content {
+    background: var(--pastel-box) !important;
+    border: 1px solid var(--pastel-border) !important;
+    box-shadow: 0 4px 12px rgba(170, 140, 155, 0.15) !important;
+}
+
+/* INSIDE SECTIONS BACKGROUND */
+.page-section,
+.main-content {
+    background: var(--pastel-bg) !important;
+}
+
+/* CHATBOT BOX */
+.chatbot-popup {
+    background: var(--pastel-box) !important;
+    border: 1px solid var(--pastel-border) !important;
+}
+
+/* PROFILE BUTTON */
+.profile-btn {
+    background: var(--pastel-box) !important;
+    border: 1px solid var(--pastel-border) !important;
+}
+
+.profile-btn:hover {
+    background: var(--pastel-accent) !important;
+}
+
+/* CARDS HOVER EFFECT */
+.feature-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--pastel-accent) !important;
+}
+
+/* FAQ SUMMARY */
+.faq-item summary {
+    background: var(--pastel-box) !important;
+}
+
+/* QUIZ RADIO HOVER */
+.radio-label:hover {
+    background: var(--pastel-accent) !important;
+}
+
+/* FORMS INPUTS */
+.form-group input,
+.form-group textarea,
+.form-group select {
+    background: var(--pastel-bg) !important;
+    border: 1px solid var(--pastel-border) !important;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--pastel-accent) !important;
+    box-shadow: 0 0 0 3px rgba(200, 140, 160, 0.25) !important;
+}
+
+
+
+/* ============= FINAL PERFECT DARK MODE — EVERYTHING FIXED ============= */
+body[data-theme="dark"] {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+/* HERO SECTION — Beautiful gradient like light mode */
+body[data-theme="dark"] .hero-section {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e1b4b 100%);
+    position: relative;
+    overflow: hidden;
+}
+body[data-theme="dark"] .hero-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(96, 165, 250, 0.15), transparent 60%);
+    pointer-events: none;
+}
+
+/* CARDS & CONTAINERS — Beautiful depth + borders */
+body[data-theme="dark"] .feature-card,
+body[data-theme="dark"] .highlight-item,
+body[data-theme="dark"] .faq-item,
+body[data-theme="dark"] .quiz-container,
+body[data-theme="dark"] .question-card,
+body[data-theme="dark"] .modal-content,
+body[data-theme="dark"] .chatbot-popup,
+body[data-theme="dark"] .settings-section {
+    background: linear-gradient(145deg, #1e293b 0%, #334155 100%) !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    color: #e2e8f0 !important;
+    transition: all 0.4s ease;
+}
+
+
+/* Hover glow effect */
+body[data-theme="dark"] .feature-card:hover,
+body[data-theme="dark"] .highlight-item:hover {
+    transform: translateY(-8px);
+    border-color: #60a5fa !important;
+    box-shadow: 0 20px 40px rgba(96, 165, 250, 0.3);
+}
+
+/* HEADINGS & LOGO */
+body[data-theme="dark"] .logo,
+body[data-theme="dark"] h1,
+body[data-theme="dark"] h2,
+body[data-theme="dark"] h3,
+body[data-theme="dark"] .section-title {
+    color: #60a5fa !important;
+}
+
+/* NAVIGATION */
+body[data-theme="dark"] .nav-link,
+body[data-theme="dark"] .profile-name {
+    color: #e2e8f0;
+}
+body[data-theme="dark"] .nav-link.active {
+    color: white;
+    background: #3b82f6;
+    border-radius: 8px;
+    padding: 8px 16px;
+}
+
+/* INPUTS & OPTIONS */
+body[data-theme="dark"] input,
+body[data-theme="dark"] textarea,
+body[data-theme="dark"] select,
+body[data-theme="dark"] .option,
+body[data-theme="dark"] .tab-btn {
+    background: #334155;
+    color: #f1f5f9;
+    border: 1px solid #475569;
+}
+
+/* Active states */
+body[data-theme="dark"] .option:hover,
+body[data-theme="dark"] .option.selected,
+body[data-theme="dark"] .tab-btn.active {
+    background: #3b82f6;
+    color: white;
+}
+
+/* QUIZ & DASHBOARD — Clean and readable */
+body[data-theme="dark"] #quiz,
+body[data-theme="dark"] #dashboards,
+body[data-theme="dark"] #dashboards * {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+/* Remove any leftover light backgrounds */
+body[data-theme="dark"] .card,
+body[data-theme="dark"] [class*="white"],
+body[data-theme="dark"] [class*="light"] {
+    background: #1e293b !important;
+    color: #e2e8f0 !important;
+}
+/* FINAL FORCE DARK MODE — KILLS ALL REMAINING LIGHT ELEMENTS */
+body[data-theme="dark"] .top-nav,
+body[data-theme="dark"] .nav-container,
+body[data-theme="dark"] .chatbot-popup,
+body[data-theme="dark"] .chatbot-header,
+body[data-theme="dark"] .chat-message,
+body[data-theme="dark"] .quiz-container,
+body[data-theme="dark"] .question-card,
+body[data-theme="dark"] .tab-buttons,
+body[data-theme="dark"] .tab-btn,
+body[data-theme="dark"] * {
+    background: #2b3036 !important;
+    background-color: #1e293b !important;
+    background-image: none !important;
+    color: #e2e8f0 !important;
+    border-color: #3c495c !important;
+}
+
+/* Specifically fix white quiz cards & chatbot */
+body[data-theme="dark"] .question-card,
+body[data-theme="dark"] .chatbot-popup,
+body[data-theme="dark"] .chat-message.bot {
+    background: #1e293b !important;
+    background-color: #1e293b !important;
+}
+
+/* Fix any remaining light backgrounds from inline styles */
+body[data-theme="dark"] [style*="background"],
+body[data-theme="dark"] [style*="white"],
+body[data-theme="dark"] [style*="rgb(255"],
+body[data-theme="dark"] [class*="light"],
+body[data-theme="dark"] [class*="white"] {
+    background: #1e293b !important;
+    background-color: #1e293b !important;
+    color: #e2e8f0 !important;
+}
+
+/* CLEAN LOGIN MODAL FIX */
+body[data-theme="dark"] .modal-content {
+    background: #0f172a !important;
+    border: 1px solid rgba(99, 102, 241, 0.2) !important;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55) !important;
+    backdrop-filter: blur(6px);
+}
+
+/* Fix inputs inside modal */
+body[data-theme="dark"] .modal-content input {
+    background: #1e293b !important;
+    border: 1px solid #475569 !important;
+    color: #f1f5f9 !important;
+}
+
+/* FIX HOME HERO BOTTOM STRIP */
+body[data-theme="dark"] .hero-section {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Fix container shadow under hero cards */
+body[data-theme="dark"] .feature-card {
+    background: linear-gradient(145deg, #1f2a3b 0%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* ------------------ CLEAN LOGIN MODAL FIX ------------------ */
+
+/* Whole modal wrapper (outer dark box) */
+body[data-theme="dark"] .modal-content {
+    background: #111827 !important;          /* smooth dark */
+    border: 1px solid #334155 !important;    /* subtle border */
+    padding: 2rem !important;
+    border-radius: 18px !important;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5) !important;
+}
+
+/* Remove those ugly dark strips behind headings */
+body[data-theme="dark"] .modal-content h2,
+body[data-theme="dark"] .modal-subtitle,
+body[data-theme="dark"] .modal-content label {
+    background: transparent !important;
+}
+
+/* Inputs */
+body[data-theme="dark"] .modal-content input {
+    background: #1e293b !important;
+    color: #f1f5f9 !important;
+    border: 1px solid #475569 !important;
+    border-radius: 10px !important;
+}
+
+/* ----------- BEAUTIFUL LOGIN BUTTON BOX ---------- */
+
+body[data-theme="dark"] .modal-content .btn-primary,
+body[data-theme="dark"] .modal-content button[type="submit"] {
+    background: #3b82f6 !important;
+    color: white !important;
+    padding: 12px;
+    width: 100%;
+    border-radius: 10px !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    box-shadow: 0 0 0 1.5px rgba(255,255,255,0.08), 
+                0 6px 16px rgba(59,130,246,0.35) !important;
+    transition: 0.25s ease;
+}
+
+/* Hover effect */
+body[data-theme="dark"] .modal-content .btn-primary:hover {
+    background: #2563eb !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(37,99,235,0.45) !important;
+}
+
+/* "Don't have an account? Sign up" text */
+body[data-theme="dark"] .modal-content .auth-switch {
+    background: transparent !important;
+    color: #cbd5e1 !important;
+}
+body[data-theme="dark"] .modal-content .auth-switch a {
+    color: #60a5fa !important;
+}
+
 .tabs { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
 .tab-button { padding:10px 20px; background:#f1f5f9; border:none; border-radius:8px; cursor:pointer; font-weight:600; transition:.2s; }
 .tab-button.active { background:#2563eb; color:#fff; }

@@ -1,12 +1,28 @@
 import os
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, session, render_template_string
 from flask_cors import CORS
 import pandas as pd
 import numpy as np
 from entity_extractor import extract_entities
+from flask_mysqldb import MySQL
+from flask_bcrypt import Bcrypt
+import random, string
+from datetime import datetime, timedelta
+import pyotp  # pip install pyotp
 
 app = Flask(__name__, static_folder="static", static_url_path="/static")
 CORS(app)
+app.secret_key = 'my_travel_app_2025_super_secure_key_!@#9876543210xyz'
+
+
+# MySQL Config
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'sbad2005' 
+app.config['MYSQL_DB'] = 'travel_app'
+
+mysql = MySQL(app)
+bcrypt = Bcrypt(app)
 
 # Load your Excel file
 EXCEL_PATH = "E:/Interactive Data Visualization of Global travel and Holidays/data/Global Travel and Holidays.xlsx"
@@ -76,20 +92,7 @@ def format_place_row(r):
     )
 
 def format_dashboard_links():
-    """Return formatted dashboard links"""
-    return (
-        f"📊 <b>Travel Statistics Dashboards</b><br><br>"
-        f"For detailed statistical analysis and visualizations, please visit our interactive dashboards:<br><br>"
-        f"🔹 <a href='{DASHBOARD_LINKS['main']}' target='_blank'><b>Main Tourism Dashboard</b></a><br>"
-        f"   • Overall tourism trends and key metrics<br><br>"
-        f"🔹 <a href='{DASHBOARD_LINKS['arrivals']}' target='_blank'><b>International Arrivals</b></a><br>"
-        f"   • Monthly arrivals, visitor types, and country-wise data<br><br>"
-        f"🔹 <a href='{DASHBOARD_LINKS['departures']}' target='_blank'><b>Indian Departures</b></a><br>"
-        f"   • Port-wise departures and destination analysis<br><br>"
-        f"🔹 <a href='{DASHBOARD_LINKS['tourism_receipts']}' target='_blank'><b>Tourism Receipts</b></a><br>"
-        f"   • Revenue trends and financial analytics<br><br>"
-        f"💡 <i>These dashboards provide interactive charts, filters, and detailed insights.</i>"
-    )
+    return "DASHBOARD_NAVIGATE_NOW"
 
 # ---------------- CATEGORY HANDLERS -----------------
 
@@ -313,6 +316,212 @@ def chat():
         print(f"Chat error: {e}")
         return jsonify({"ok": False, "message": f"Server error: {str(e)}"})
 
+
+# ---------- AUTH ----------
+@app.route('/signup', methods=['POST'])
+def signup():
+    data = request.json
+    name = data.get('name')
+    email = data.get('email').lower()
+    password = data.get('password')
+
+    if not all([name, email, password]):
+        return jsonify({"ok": False, "message": "All fields required"})
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT id FROM users WHERE email = %s", (email,))
+    if cur.fetchone():
+        cur.close()
+        return jsonify({"ok": False, "message": "Email already registered"})
+
+    # THIS IS THE FIX: Properly hash the password
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    try:
+        cur.execute("""INSERT INTO users (name, email, password) 
+                       VALUES (%s, %s, %s)""", (name, email, hashed_password))
+        mysql.connection.commit()
+        return jsonify({"ok": True, "message": "Account created! Please login."})
+    except Exception as e:
+        return jsonify({"ok": False, "message": "Database error"})
+    finally:
+        cur.close()
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    email = data.get('email').lower()
+    password = data.get('password')
+
+    cur = mysql.connection.cursor()
+    
+    # GET USER + THEIR PERSONAL THEME IN ONE QUERY
+    cur.execute("""
+        SELECT id, name, password, COALESCE(theme, 'light') 
+        FROM users 
+        WHERE email = %s
+    """, (email,))
+    user = cur.fetchone()
+    cur.close()
+
+    if user and bcrypt.check_password_hash(user[2], password):
+        session['user_id'] = user[0]
+        session['user_name'] = user[1]
+        session['theme'] = user[3]  # This is their saved theme (light/dark)
+        
+        return jsonify({"ok": True, "name": user[1]})
+    
+    return jsonify({"ok": False, "message": "Invalid email or password"})
+
+@app.route('/check-login')
+def check_login():
+    try:
+        if 'user_id' not in session:
+            return jsonify({"logged_in": False, "theme": "light"})
+        
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT COALESCE(theme, 'light') FROM users WHERE id = %s", (session['user_id'],))
+        result = cur.fetchone()
+        theme = result[0] if result else 'light'
+        cur.close()
+        
+        return jsonify({"logged_in": True, "theme": theme})
+    except Exception as e:
+        print(f"Check-login error: {e}")  # Log for debug
+        return jsonify({"logged_in": False, "theme": "light"})  # Always valid JSON
+
+@app.route('/send-otp', methods=['POST'])
+def send_otp():
+    email = request.json['email'].lower()
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT id FROM users WHERE email=%s", (email,))
+    user = cur.fetchone()
+    if not user:
+        return jsonify({"ok": False, "message": "Email not found"})
+    
+    otp = ''.join(random.choices(string.digits, k=6))
+    session['otp'] = otp
+    session['otp_time'] = datetime.now().timestamp()
+    session['otp_email'] = email
+    print(f"OTP for {email}: {otp}")  # In real app, send via email
+    return jsonify({"ok": True, "message": "OTP sent to email"})
+
+@app.route('/verify-otp', methods=['POST'])
+def verify_otp():
+    otp = request.json['otp']
+    if session.get('otp') == otp and (datetime.now().timestamp() - session.get('otp_time', 0)) < 300:
+        email = session['otp_email']
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT id, name FROM users WHERE email=%s", (email,))
+        user = cur.fetchone()
+        session['user_id'] = user[0]
+        session['user_name'] = user[1]
+        session.pop('otp', None)
+        session.pop('otp_time', None)
+        session.pop('otp_email', None)
+        return jsonify({"ok": True, "name": user[1]})
+    return jsonify({"ok": False, "message": "Invalid or expired OTP"})
+
+# ---------- FEEDBACK ----------
+@app.route('/submit-feedback', methods=['POST'])
+def submit_feedback():
+    if 'user_id' not in session:
+        return jsonify({"ok": False, "message": "Login required"})
+    data = request.json
+    cur = mysql.connection.cursor()
+    cur.execute("INSERT INTO feedback (user_id, type, message) VALUES (%s, %s, %s)",
+                (session['user_id'], data['type'], data['message']))
+    mysql.connection.commit()
+    cur.close()
+    return jsonify({"ok": True})
+
+@app.route('/my-feedback')
+def my_feedback():
+    if 'user_id' not in session:
+        return jsonify([])
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT type, message, created_at FROM feedback WHERE user_id=%s ORDER BY created_at DESC", (session['user_id'],))
+    feedback = cur.fetchall()
+    cur.close()
+    return jsonify([{"type": f[0], "message": f[1], "date": f[2].strftime("%b %d, %Y")} for f in feedback])
+
+# ---------- SETTINGS ----------
+@app.route('/settings', methods=['GET', 'POST'])
+def settings():
+    if 'user_id' not in session:
+        return jsonify({"ok": False})
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        data = request.json
+        if 'theme' in data:
+            cur.execute("UPDATE users SET theme=%s WHERE id=%s", (data['theme'], session['user_id']))
+        if 'password' in data:
+            hashed = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+            cur.execute("UPDATE users SET password=%s WHERE id=%s", (hashed, session['user_id']))
+        mysql.connection.commit()
+    cur.execute("SELECT name, email, theme FROM users WHERE id=%s", (session['user_id'],))
+    user = cur.fetchone()
+    cur.close()
+    return jsonify({"name": user[0], "email": user[1], "theme": user[2]})
+
+# ==================== SETTINGS: THEME & PASSWORD ====================
+# SAVE THEME PER USER
+@app.route('/settings/theme', methods=['POST'])
+def save_theme():
+    if 'user_id' not in session:
+        return jsonify({"success": False})
+    
+    data = request.get_json()
+    theme = data.get('theme', 'light')
+    if theme not in ['light', 'dark']:
+        theme = 'light'
+    
+    cur = mysql.connection.cursor()
+    cur.execute("UPDATE users SET theme = %s WHERE id = %s", (theme, session['user_id']))
+    mysql.connection.commit()
+    cur.close()
+    
+    return jsonify({"success": True})
+
+
+@app.route('/get-theme')
+def get_theme():
+    if 'user_id' not in session:
+        return jsonify({"theme": "light"})
+    
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT COALESCE(theme, 'light') FROM users WHERE id = %s", (session['user_id'],))
+    theme = cur.fetchone()[0]
+    cur.close()
+    
+    return jsonify({"theme": theme})
+
+@app.route('/settings/password', methods=['POST'])
+def change_password():
+    if 'user_id' not in session:
+        return jsonify({"ok": False, "message": "Login required"})
+    
+    data = request.json
+    old_pass = data.get('old_password')
+    new_pass = data.get('new_password')
+    
+    if not all([old_pass, new_pass]):
+        return jsonify({"ok": False, "message": "Both passwords required"})
+    
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT password FROM users WHERE id = %s", (session['user_id'],))
+    current_hash = cur.fetchone()[0]
+    
+    if not bcrypt.check_password_hash(current_hash, old_pass):
+        cur.close()
+        return jsonify({"ok": False, "message": "Current password is wrong"})
+    
+    new_hash = bcrypt.generate_password_hash(new_pass).decode('utf-8')
+    cur.execute("UPDATE users SET password = %s WHERE id = %s", (new_hash, session['user_id']))
+    mysql.connection.commit()
+    cur.close()
+    
+    return jsonify({"ok": True, "message": "Password changed successfully!"})
 
 # ---------------- FRONTEND SERVE ---------------------
 

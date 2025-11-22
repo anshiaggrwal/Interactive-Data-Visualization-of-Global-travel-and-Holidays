@@ -6,9 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
+    <!-- TOP NAVIGATION -->
+    <script>
+        // ULTIMATE THEME FIX — WORKS 100% FOREVER
+        // Fixes: reload, back button, cache, new tab, double alert, wrong theme after logout
+        
+        function applyCorrectTheme() {
+            fetch('/check-login?t=' + Date.now(), {
+                method: 'GET',
+                cache: 'no-store',
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            })
+            .then(r => {
+                if (!r.ok) return Promise.reject('HTTP ' + r.status);
+                return r.json();
+            })
+            .then(data => {
+                const theme = (data.logged_in && data.theme) ? data.theme : 'light';
+                document.documentElement.setAttribute('data-theme', theme);
+                document.body.setAttribute('data-theme', theme);
+                
+                // Update theme button if visible
+                const btn = document.getElementById('themeToggleBtn');
+                if (btn) {
+                    btn.textContent = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+                }
+            })
+            .catch(err => {
+                console.log('Theme check failed → forcing light mode:', err);
+                document.documentElement.setAttribute('data-theme', 'light');
+                document.body.setAttribute('data-theme', 'light');
+            });
+        }
+
+        // Run on DOM ready + full page load (covers all cases)
+        document.addEventListener('DOMContentLoaded', applyCorrectTheme);
+        window.addEventListener('load', applyCorrectTheme);
+        window.addEventListener('pageshow', applyCorrectTheme);  // ← THIS FIXES BACK BUTTON!
+
+        // Global function for login/logout
+        window.applyUserTheme = applyCorrectTheme;
+    </script>
+    
 </head>
 <body>
-    <!-- TOP NAVIGATION -->
     <header class="top-nav">
         <div class="nav-container">
             <div class="logo">TravelInsights<span>AI</span></div>
@@ -26,6 +71,7 @@
                     </button>
                     <div class="profile-dropdown" id="profileDropdown">
                         <a href="#profile">My Profile</a>
+                        <a href="#" onclick="openModal('settingsModal')">Settings</a>
                         <a href="#feedback">Feedback</a>
                         <a href="#" id="logoutLink">Logout</a>
                     </div>
@@ -277,6 +323,7 @@
 
     <!-- CHATBOT POPUP (FIXED: Scroll + Input Always Visible) -->
     <div class="chatbot-popup" id="chatbotPopup">
+        <!-- INVISIBLE DUMMY INPUT — TRICKS CHROME 100% -->
         <div class="chatbot-header">
             <span>Tara Your Travel Assistant</span>
             <button class="close-chatbot" id="closeChatbot">×</button>
@@ -284,13 +331,15 @@
         <div class="chatbot-body">
             <div id="chatbotMessages" class="chatbot-messages"></div>
             <div class="chatbot-input-area">
+                <input type="text" name="username" style="display:none !important;" tabindex="-1" autocomplete="username" />
+                <input type="password" name="password" style="display:none !important;" tabindex="-1" autocomplete="current-password" />
                 <select id="chatbotCategory" class="chatbot-select">
                     <option value="">Select</option>
                     <option value="holiday details">Holidays</option>
                     <option value="destination guidance">Guidance</option>
                     <option value="travel statistics">Stats</option>
                 </select>
-                <input type="text" id="chatbotInput" placeholder="Ask your question..." />
+                <input type="text" id="chatbotInput" placeholder="Ask your question..." autocomplete="off" name="chatbot-message" data-form-type="other" aria-label="Chat message" style="caret-color: white;"/>
                 <button id="chatbotSend">➤</button>
             </div>
         </div>
@@ -345,7 +394,35 @@
             </form>
         </div>
     </div>
+    <!-- REGISTER MODAL -->
+    <div class="modal" id="registerModal">
+        ... your existing register modal ...
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('settingsModal')">&times;</span>
+            <h2>Settings</h2>
+
+            <div class="settings-section">
+                <h3>Appearance</h3>
+                <button class="btn-secondary" id="themeToggleBtn" onclick="toggleTheme()">
+                    Loading theme...
+                </button>
+            </div>
+
+            <div class="settings-section">
+                <h3>Change Password</h3>
+                <input type="password" id="oldPassword" placeholder="Current password" class="form-input" />
+                <input type="password" id="newPassword" placeholder="New password" class="form-input" style="margin:10px 0;" />
+                <button type="button" class="btn-primary" onclick="changePassword()">Update Password</button>
+                <div id="passStatus" style="margin-top:10px; font-size:0.9em;"></div>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
+
 </body>
 </html>

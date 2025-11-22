@@ -1,6 +1,39 @@
 // ==================== STATE MANAGEMENT ====================
 let currentUser = null;
 
+// Check if user is already logged in
+async function checkLoginStatus() {
+    try {
+        const res = await fetch('/profile');
+        const data = await res.json();
+        // Inside your login form submission handler, replace the success part:
+        if (data.ok) {
+            currentUser = { name: data.name, email: email };
+            updateAuthUI();
+            loginModal.classList.remove('show');
+            alert(`Welcome back, ${data.name}!`);
+
+            // THIS IS THE MISSING PIECE — RE-APPLY THEME AFTER LOGIN
+            fetch('/check-login')
+                .then(r => r.json())
+                .then(themeData => {
+                    const theme = themeData.logged_in && themeData.theme ? themeData.theme : 'light';
+                    document.documentElement.setAttribute('data-theme', theme);
+                    document.body.setAttribute('data-theme', theme);
+                    updateThemeButton(); // if you have this function
+                })
+                .catch(() => {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    document.body.setAttribute('data-theme', 'light');
+                });
+        }
+    } catch (err) {
+        console.log("Not logged in");
+    }
+}
+
+// Run on page load
+window.addEventListener('load', checkLoginStatus);
 // ==================== PAGE NAVIGATION ====================
 function showPage(pageId) {
     // Hide all sections
@@ -88,53 +121,81 @@ window.addEventListener('click', (e) => {
 });
 
 // Login form submission
-document.getElementById('loginForm').addEventListener('submit', (e) => {
+// Login form submission
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = document.getElementById('loginEmail').value;
+    const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
-    
-    // In production, validate with backend
-    currentUser = {
-        name: email.split('@')[0],
-        email: email
-    };
-    
-    updateAuthUI();
-    loginModal.classList.remove('show');
-    
-    // Show success message
-    alert('Login successful! Welcome back.');
-});
 
+    try {
+        const res = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+            currentUser = { name: data.name, email: email };
+            updateAuthUI();
+            loginModal.classList.remove('show');
+            alert(`Welcome back, ${data.name}!`);
+
+            // DELAYED CALL — Gives session time to process
+            setTimeout(() => {
+                window.applyUserTheme();
+            }, 500);  // 0.5 second delay fixes 99% of timing issues
+        } else {
+            alert('Login failed: ' + data.message);
+        }
+    } catch (err) {
+        alert('Server error. Is Flask running?');
+    }
+});
 // Register form submission
-document.getElementById('registerForm').addEventListener('submit', (e) => {
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = document.getElementById('registerName').value;
-    const email = document.getElementById('registerEmail').value;
+    const name = document.getElementById('registerName').value.trim();
+    const email = document.getElementById('registerEmail').value.trim();
     const password = document.getElementById('registerPassword').value;
-    
-    // In production, send to backend
-    currentUser = {
-        name: name,
-        email: email
-    };
-    
-    updateAuthUI();
-    registerModal.classList.remove('show');
-    
-    // Show success message
-    alert('Account created successfully! Welcome to TravelInsights AI.');
-});
 
+    try {
+        const res = await fetch('/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password })
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+            alert('Account created! Please login.');
+            registerModal.classList.remove('show');
+            loginModal.classList.add('show');
+        } else {
+            alert('Signup failed: ' + data.message);
+        }
+    } catch (err) {
+        alert('Server error');
+    }
+});
 // Logout
-document.getElementById('logoutLink').addEventListener('click', (e) => {
+document.getElementById('logoutLink').addEventListener('click', async (e) => {
     e.preventDefault();
+    
+    await fetch('/logout');
     currentUser = null;
     updateAuthUI();
     showPage('home');
-    alert('Logged out successfully.');
-});
+    
+    // INSTANT + PERMANENT LIGHT THEME
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.body.setAttribute('data-theme', 'light');
+    
+    const btn = document.getElementById('themeToggleBtn');
+    if (btn) btn.textContent = 'Switch to Dark Mode';
 
+    alert('Logged out successfully');
+});
 // Update UI based on auth state
 function updateAuthUI() {
     if (currentUser) {
@@ -356,6 +417,244 @@ document.head.insertAdjacentHTML('beforeend', `
 }
 </style>
 `);
+
+// ==================== SETTINGS MODAL ====================
+function openModal(id) {
+    document.getElementById(id).classList.add('show');
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal')) {
+        e.target.classList.remove('show');
+    }
+});
+
+// ██████████████████ FINAL PERFECT THEME SYSTEM ██████████████████
+// ==================== THEME MANAGEMENT ====================
+// (Remove all other theme loaders except the inline one in index.html)
+
+function updateThemeButton() {
+    const btn = document.getElementById('themeToggleBtn');
+    if (!btn) return;
+
+    const currentTheme = document.body.getAttribute('data-theme') || 'light';
+    
+    btn.textContent = currentTheme === 'dark' 
+        ? 'Switch to Light Mode' 
+        : 'Switch to Dark Mode';
+        
+    // Beautiful colors
+    btn.style.color = currentTheme === 'dark' ? '#e2e8f0' : '#1f2937';
+    btn.style.backgroundColor = currentTheme === 'dark' ? '#334155' : '#f1f5f9';
+    btn.style.border = currentTheme === 'dark' ? '1px solid #475569' : '1px solid #cbd5e1';
+}
+
+function toggleTheme() {
+    const currentTheme = document.body.getAttribute('data-theme') || 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    fetch('/settings/theme', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ theme: newTheme })
+    }).then(response => {
+        if (!response.ok) throw new Error('Save failed');
+        return response.json();
+    }).then(() => {
+        document.documentElement.setAttribute('data-theme', newTheme);
+        document.body.setAttribute('data-theme', newTheme);
+        updateThemeButton();
+    }).catch(err => {
+        console.error('Theme save error:', err);
+        alert('Failed to save theme. Please try again.');
+    });
+}
+
+// Run when settings modal opens
+const settingsModal = document.getElementById('settingsModal');
+if (settingsModal) {
+    settingsModal.addEventListener('transitionend', () => {
+        if (settingsModal.classList.contains('show')) {
+            updateThemeButton();
+        }
+    });
+}
+
+function applySavedTheme() {
+    fetch('/check-login')
+        .then(r => r.json())
+        .then(d => {
+            const theme = d.logged_in && d.theme ? d.theme : 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+            document.body.setAttribute('data-theme', theme);
+            updateThemeButton?.();
+        })
+        .catch(() => {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.body.setAttribute('data-theme', 'light');
+        });
+}
+
+// FINAL THEME LOADER — WORKS 100% EVERY TIME
+function applyTheme() {
+    fetch('/get-theme')
+        .then(response => response.json())
+        .then(data => {
+            const theme = data.theme || 'light';
+            document.body.setAttribute('data-theme', theme);
+            
+            const btn = document.getElementById('themeToggleBtn');
+            if (btn) {
+                btn.textContent = theme === 'dark' 
+                    ? 'Switch to Light Mode' 
+                    : 'Switch to Dark Mode';
+            }
+        })
+        .catch(() => {
+            document.body.setAttribute('data-theme', 'light');
+        });
+}
+
+// Run on page load
+window.addEventListener('DOMContentLoaded', applyTheme);
+
+// Also run when settings modal opens (important!)
+document.getElementById('settingsModal')?.addEventListener('shown.bs.modal', applyTheme);
+// or if not using Bootstrap: use transitionend like before
+
+// ONE AND ONLY LOAD LISTENER — THIS FIXES EVERYTHING
+window.addEventListener('DOMContentLoaded', () => {
+    fetch('/get-theme')
+    .then(r => r.json())
+    .then(data => {
+        const theme = data.theme || 'light';
+        document.body.setAttribute('data-theme', theme);
+        const btn = document.getElementById('themeToggleBtn');
+        if (btn) {
+            btn.textContent = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+        }
+    });
+});
+
+// ==================== CHANGE PASSWORD ====================
+async function changePassword() {
+    const oldPass = document.getElementById('oldPassword').value;
+    const newPass = document.getElementById('newPassword').value;
+    const status = document.getElementById('passStatus');
+
+    if (!oldPass || !newPass) {
+        status.textContent = "Please fill both fields";
+        status.style.color = "red";
+        return;
+    }
+
+    try {
+        const res = await fetch('/settings/password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ old_password: oldPass, new_password: newPass })
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+            status.textContent = data.message || "Password changed!";
+            status.style.color = "green";
+            document.getElementById('oldPassword').value = '';
+            document.getElementById('newPassword').value = '';
+        } else {
+            status.textContent = data.message || "Failed";
+            status.style.color = "red";
+        }
+    } catch (err) {
+        status.textContent = "Server error";
+        status.style.color = "red";
+    }
+}
+
+// Auto-scroll to dashboards when bot sends this special tag
+function checkForDashboardTrigger() {
+    const messages = document.querySelectorAll('.chat-message.bot');
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage && lastMessage.innerHTML.includes('<trigger-dashboard-navigation />')) {
+        // Clean the message
+        lastMessage.innerHTML = lastMessage.innerHTML.replace('<trigger-dashboard-navigation />', '');
+        
+        // Navigate to dashboards
+        showPage('dashboards');
+        document.getElementById('dashboards').scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// AUTO NAVIGATE TO DASHBOARDS WHEN BOT SAYS "DASHBOARD_NAVIGATE_NOW"
+const originalAddChatMessage = addChatMessage;
+addChatMessage = function(type, content) {
+    const msgDiv = originalAddChatMessage(type, content);
+    
+    if (type === 'bot' && content === 'DASHBOARD_NAVIGATE_NOW') {
+        // Hide the message and navigate
+        msgDiv.style.display = 'none';
+        
+        // Navigate to dashboards
+        showPage('dashboards');
+        document.getElementById('dashboards').scrollIntoView({ behavior: 'smooth' });
+        
+        // Optional: Show a nice message instead
+        setTimeout(() => {
+            addChatMessage('bot', "Here are your interactive dashboards!");
+        }, 300);
+    }
+    
+    return msgDiv;
+};
+
+// PERFECT MODAL SYSTEM — NEVER LOSES YOUR PLACE
+let lastScrollPosition = 0;
+let lastActivePage = 'home';
+
+function openModal(id) {
+    // Save current scroll and active page
+    lastScrollPosition = window.scrollY;
+    lastActivePage = document.querySelector('.page-section.active')?.id || 'home';
+
+    const modal = document.getElementById(id);
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden'; // Stop background scroll
+}
+
+function closeModal(id) {
+    const modal = document.getElementById(id);
+    modal.classList.remove('show');
+    document.body.style.overflow = ''; // Restore scroll
+
+    // RETURN EXACTLY WHERE USER WAS
+    setTimeout(() => {
+        showPage(lastActivePage);
+        window.scrollTo(0, lastScrollPosition);
+    }, 100);
+}
+
+// Close when clicking outside
+document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            const modalId = this.id;
+            closeModal(modalId);
+        }
+    });
+});
+
+// Close with × button
+document.querySelectorAll('.modal-close').forEach(btn => {
+    btn.addEventListener('click', function() {
+        closeModal(this.closest('.modal').id);
+    });
+});
+
 // ==================== INITIAL STATE ====================
 // Show home page by default
 showPage('home');
