@@ -89,7 +89,7 @@ python main.py
 ## 📊 Datasets Used
 
 - Global travel destinations dataset
-- Global travel and holidays dataset (Not included in repo)
+- Global travel and holidays dataset 
 
 ---
 

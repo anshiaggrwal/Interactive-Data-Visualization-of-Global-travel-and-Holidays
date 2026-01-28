@@ -6,7 +6,7 @@
 
 import pandas as pd
 
-data = pd.read_excel("E:\\Interactive Data Visualization of Global travel and Holidays\\data\\Global Travel and Holidays.xlsx", sheet_name = None)
+data = pd.read_excel("E:\\ANSHI CLG\\frontend\\data\\Global Travel and Holidays.xlsx", sheet_name = None)
 data.keys()
 
 
