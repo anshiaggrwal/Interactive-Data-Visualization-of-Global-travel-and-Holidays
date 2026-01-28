@@ -42,13 +42,6 @@ visitor_type_df = excel_data.get("Monthly Arrival by Visitor Type")
 top_places_df = excel_data.get("Top Indian Places to Visit")
 cities_df = excel_data.get("Cities to Visit in India")
 
-# Power BI Dashboard Links (UPDATE THESE WITH YOUR ACTUAL DASHBOARD LINKS)
-DASHBOARD_LINKS = {
-    "main": "https://app.powerbi.com/view?r=YOUR_MAIN_DASHBOARD_LINK",
-    "arrivals": "https://app.powerbi.com/view?r=YOUR_ARRIVALS_DASHBOARD_LINK",
-    "departures": "https://app.powerbi.com/view?r=YOUR_DEPARTURES_DASHBOARD_LINK",
-    "tourism_receipts": "https://app.powerbi.com/view?r=YOUR_RECEIPTS_DASHBOARD_LINK",
-}
 
 # ---------------- HELPERS ------------------
 
