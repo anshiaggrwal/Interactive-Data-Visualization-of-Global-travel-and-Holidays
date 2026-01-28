@@ -23,7 +23,7 @@ The project combines **data processing, entity extraction, and interactive dashb
 - **Visualization:** Power BI (PBIX)
 - **Frontend:** HTML, CSS, JavaScript
 - **Database:** SQL
-- **Tools:** Jupyter Notebook, VS Code
+- **Tools:** VS Code
 
 ---
 
@@ -31,20 +31,13 @@ The project combines **data processing, entity extraction, and interactive dashb
 
 ```
 interactive-data-visualisation/
-│── data/
-│   ├── dataset_travels.xlsx
-│   └── Global_Travel_and_Holidays.xlsx
 │── static/
 │   ├── index.html
 │   ├── script.js
 │   └── style.css
-│── app.py
 │── main.py
 │── database.py
 │── entity_extractor.py
-│── entity_extractor.ipynb
-│── dashboard_design.pbix
-│── sample_data.sql
 │── requirements.txt
 │── README.md
 │── .gitignore
@@ -56,8 +49,7 @@ interactive-data-visualisation/
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/your-username/interactive-data-visualisation.git
-cd interactive-data-visualisation
+git clone https://anshiaggrwal/Interactive-Data-Visualization-of-Global-travel-and-Holidays.git
 ```
 
 ---
@@ -97,20 +89,19 @@ python main.py
 ## 📊 Datasets Used
 
 - Global travel destinations dataset
-- Global travel and holidays dataset (Excel format)
+- Global travel and holidays dataset (Not included in repo)
 
 ---
 
 ## 📈 Dashboard
 
-The project includes a **Power BI dashboard (`dashboard_design.pbix`)** for interactive insights and visual analytics.
+The project includes a **Power BI dashboard** for interactive insights and visual analytics.
 
 ---
 
 ## 🚀 Future Enhancements
 
 - Add real-time travel data APIs
-- Deploy dashboard as a web application
 - Advanced filtering and geographic visualizations
 - Machine learning-based travel trend predictions
 
